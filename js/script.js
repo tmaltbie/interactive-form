@@ -1,5 +1,5 @@
 const form = document.querySelector('form')
-form.reset()
+// form.reset()
 
 const name = document.querySelector('#name') // selects name input field
 name.focus() // when page loads, immediately focus name input field
@@ -95,13 +95,6 @@ document.querySelector('.activities').addEventListener('change', e => {
   if (total === 0) {
     price.style.display = 'none'
   }
-
-  // activities validator
-  // if (!clicked.checked) {
-  //   activitiesLegend.style.color = 'red'
-  // } else {
-  //   activitiesLegend.style.color = ''
-  // }
 })
 
 /** Payment Section */
@@ -235,3 +228,6 @@ form.addEventListener('submit', e => {
     ccNum.focus()
   }
 })
+
+// Unchecked runtime.lastError: The message port closed before a response was received.
+// [Violation] Forced reflow while executing JavaScript took 31ms
