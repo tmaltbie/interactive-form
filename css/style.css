@@ -113,7 +113,11 @@ input {
   color: #efe79b
 }
 
-input:disabled {
+.activities input:disabled {
+  text-decoration: line-through;
+}
+
+.activities input:disabled+label {
   text-decoration: line-through;
 }
 

@@ -231,6 +231,7 @@ email.addEventListener('blur', emailValidator)
 ccNum.addEventListener('keyup', creditCardValidator)
 ccCVV.addEventListener('keyup', creditCardValidator)
 ccZip.addEventListener('keyup', creditCardValidator)
+activities.addEventListener('change', activitiesValidator)
 
 form.addEventListener('submit', e => {
   if (!nameValidator()) {
