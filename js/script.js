@@ -1,46 +1,49 @@
 const form = document.querySelector('form')
-// form.reset()
+const name = document.querySelector('#name')
+name.focus()
 
-const name = document.querySelector('#name') // selects name input field
-name.focus() // when page loads, immediately focus name input field
-
-const jobRole = document.querySelector('#title') // reference to job role menu
-const otherInput = document.querySelector('#other-title') // reference to text input for the other option
+const jobRole = document.querySelector('#title')
+const otherInput = document.querySelector('#other-title')
 otherInput.style.display = 'none'
 
-jobRole.addEventListener('change', e => { // listener on job role menu, listening for a change
-  if (e.target.value === 'other') { // if the target of the change is equal to 'other'
-    otherInput.style.display = '' // reveal the text input
+jobRole.addEventListener('change', e => {
+  if (e.target.value === 'other') {
+    otherInput.style.display = ''
   } else {
-    otherInput.style.display = 'none' // otherwise, hide the text input
+    otherInput.style.display = 'none'
   }
 })
-const colorDiv = document.querySelector('#colors-js-puns')
-const colorSelectElement = document.querySelector('#color') // selects color menu
-const colorOptionElements = document.querySelectorAll('#color option') // selects all color options
-const pleaseSelect = document.createElement('option') // create new option
-pleaseSelect.text = 'Please select a theme' // adds text to new option
-pleaseSelect.value = 'please' // sets value
-colorSelectElement.appendChild(pleaseSelect) // adds please select to color options
-colorSelectElement.insertBefore(pleaseSelect, colorSelectElement.firstElementChild) // makes please select at top of options list
-pleaseSelect.selected = true // initially shows please select option on site load
-pleaseSelect.hidden = true // makes please select not selectable/not in list
 
-// this function will hide all the t-shirt color options
+const colorDiv = document.querySelector('#colors-js-puns')
+const colorSelectElement = document.querySelector('#color')
+const colorOptionElements = document.querySelectorAll('#color option')
+const selectError = document.createElement('option')
+selectError.text = 'Please select a theme'
+selectError.value = 'please'
+selectError.selected = true
+selectError.hidden = true
+colorSelectElement.appendChild(selectError)
+colorSelectElement.insertBefore(selectError, colorSelectElement.firstElementChild) // makes please select at top of options list
+
+/**
+ * hides all the t-shirt colors
+ * simple function to loop through all the t-shirt color options so they cannot be selected
+ * invoke the function afterward.
+ */
 const hideColorOptions = () => {
   for (let i = 0; i < colorOptionElements.length; i++) {
     colorOptionElements[i].hidden = true
   }
 }
-hideColorOptions() // call function to hide the colors
+
+hideColorOptions()
 
 /** T-Shirt Selection */
-const designSelectElement = document.querySelector('#design') // selects design drop down
-const designOptionsElements = document.querySelectorAll('#design option') // selects design options
-designOptionsElements[0].hidden = true // makes "select theme" not selectable
-colorDiv.hidden = true // initially hides entire color div
+const designSelectElement = document.querySelector('#design')
+const designOptionsElements = document.querySelectorAll('#design option')
+designOptionsElements[0].hidden = true
+colorDiv.hidden = true
 
-// select a theme and show & reset corresponding tshirt designs
 designSelectElement.addEventListener('change', () => {
   if (designOptionsElements[1].selected) {
     colorDiv.hidden = false
@@ -60,16 +63,15 @@ designSelectElement.addEventListener('change', () => {
 })
 
 /** Select Activities Section */
-const activities = document.querySelector('.activities') // ref to activities fieldset
-const activitiesInput = document.querySelectorAll('.activities input') // get a reference to all the inputs
-const activitiesLegend = document.querySelector('.activities legend') // reference to activities legend
-let total = 0 // total cost of checked activites
-const price = document.createElement('h4') // create header for total $
+const activities = document.querySelector('.activities')
+const activitiesInput = document.querySelectorAll('.activities input')
+const activitiesLegend = document.querySelector('.activities legend')
+let total = 0
+const price = document.createElement('h4')
 price.style.display = 'none'
 activities.appendChild(price)
 
-// get a reference to the activities fieldset with eventlistener for changes & event
-document.querySelector('.activities').addEventListener('change', e => {
+activities.addEventListener('change', e => {
   const clicked = e.target
   const clickedDayTime = clicked.getAttribute('data-day-and-time')
   const clickedCost = clicked.getAttribute('data-cost')
@@ -85,7 +87,6 @@ document.querySelector('.activities').addEventListener('change', e => {
       }
     }
   }
-  // display total cost of selected activities
   if (clicked.checked) {
     price.style.display = ''
     price.textContent = `Total: $${total = total + parseInt(clickedCost)}`
@@ -98,19 +99,17 @@ document.querySelector('.activities').addEventListener('change', e => {
 })
 
 /** Payment Section */
-const payment = document.querySelectorAll('#payment option') // reference to all payment options
-payment[0].hidden = true // "select payment method" unselectable
+const payment = document.querySelectorAll('#payment option')
+payment[0].hidden = true
 
-// reference to all payment options:
 const creditcard = document.querySelector('#credit-card')
 const paypal = document.querySelector('#paypal')
 const bitcoin = document.querySelector('#bitcoin')
-// hide all the payment options:
+
 creditcard.hidden = true
 paypal.hidden = true
 bitcoin.hidden = true
 
-// when payment option is selected, show info about that option & hide others
 document.querySelector('#payment').addEventListener('change', e => {
   if (payment[1].selected) {
     creditcard.hidden = false
@@ -133,6 +132,10 @@ const ccNum = document.querySelector('#cc-num')
 const ccZip = document.querySelector('#zip')
 const ccCVV = document.querySelector('#cvv')
 
+/**
+ * nameValidator looks to make sure a name of any kind has been entered into the name field
+ * otherwise it will create a placeholder message and create a red border
+ */
 const nameValidator = () => {
   const nameValue = name.value
   if (nameValue !== '' || nameValue === null) {
@@ -145,6 +148,11 @@ const nameValidator = () => {
   }
 }
 
+/**
+ * emailValidator looks to make sure an email has been entered
+ * otherwise it will create a placeholder message and create a red border
+ * the regular expression has been adapted from https://www.regular-expressions.info/email.html
+ */
 const emailValidator = () => {
   const emailValue = email.value
   const validEmail = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
@@ -158,20 +166,35 @@ const emailValidator = () => {
   }
 }
 
+const noSelectionMessage = document.createElement('div')
+noSelectionMessage.textContent = 'please select at least one activity'
+noSelectionMessage.style.fontStyle = 'italic'
+noSelectionMessage.style.fontSize = '14px'
+noSelectionMessage.style.color = 'red'
+noSelectionMessage.hidden = true
+activitiesLegend.appendChild(noSelectionMessage)
+
+/**
+ * activitiesValidator looks to make at least one activity has been selected
+ * otherwise it will create div with an error message & change text color to red
+ * code adapted from: https://stackoverflow.com/questions/11787665/making-sure-at-least-one-checkbox-is-checked/11788024#11788024
+ */
 const activitiesValidator = () => {
-  const noSelectionMessage = document.createElement('div')
-  noSelectionMessage.textContent = 'please select at least one activity'
-  noSelectionMessage.style.fontStyle = 'italic'
-  noSelectionMessage.style.fontSize = '14px'
-  noSelectionMessage.style.color = 'red'
-  noSelectionMessage.hidden = true
-  activitiesLegend.appendChild(noSelectionMessage)
   const activitiesCheckboxes = document.querySelectorAll('.activities input')
+  let isChecked = false
   for (let i = 0; i < activitiesCheckboxes.length; i++) {
-    if (!activitiesCheckboxes[i].checked) {
-      activitiesLegend.style.color = 'red'
-      noSelectionMessage.hidden = false
+    if (activitiesCheckboxes[i].checked) {
+      isChecked = true
     }
+  }
+  if (isChecked) {
+    activitiesLegend.style.color = ''
+    noSelectionMessage.hidden = true
+    return true
+  } else {
+    activitiesLegend.style.color = 'red'
+    noSelectionMessage.hidden = false
+    return false
   }
 }
 
@@ -207,14 +230,13 @@ name.addEventListener('blur', nameValidator)
 email.addEventListener('blur', emailValidator)
 ccNum.addEventListener('keyup', creditCardValidator)
 ccCVV.addEventListener('keyup', creditCardValidator)
+ccZip.addEventListener('keyup', creditCardValidator)
 
 form.addEventListener('submit', e => {
-  // nameValidator()
   if (!nameValidator()) {
     e.preventDefault()
     name.focus()
   }
-  // emailValidator()
   if (!emailValidator()) {
     e.preventDefault()
     email.focus()
@@ -222,12 +244,11 @@ form.addEventListener('submit', e => {
   if (!activitiesValidator()) {
     e.preventDefault()
   }
-  // creditCardValidator()
   if (!creditCardValidator()) {
     e.preventDefault()
-    ccNum.focus()
   }
 })
 
+// what are these issues appearing in console?
 // Unchecked runtime.lastError: The message port closed before a response was received.
 // [Violation] Forced reflow while executing JavaScript took 31ms

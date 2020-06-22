@@ -3,6 +3,7 @@
 ==================================== */
 
 @import url('https://fonts.googleapis.com/css?family=Nunito|Roboto+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200&display=swap');
 
 * {
   box-sizing: border-box;
@@ -11,7 +12,7 @@
 body,
 input,
 button {
-	font-family: 'Nunito', sans-serif;
+	font-family: 'Josefin Sans', sans-serif;
 }
 
 body {
@@ -93,6 +94,14 @@ input {
 	border: 2px solid rgb(111, 157, 220);
 	border-radius: 3px;
 	outline: none;
+}
+
+.basic input {
+  box-shadow: 3px 3px #888888;
+}
+
+.activities input {
+  box-shadow: 1px 1px #888888;
 }
 
 input:focus {
