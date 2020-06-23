@@ -253,7 +253,3 @@ form.addEventListener('submit', e => {
     e.preventDefault()
   }
 })
-
-// what are these issues appearing in console?
-// Unchecked runtime.lastError: The message port closed before a response was received.
-// [Violation] Forced reflow while executing JavaScript took 31ms
