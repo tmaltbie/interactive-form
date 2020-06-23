@@ -106,19 +106,12 @@ input {
 }
 
 .activities label {
-  transition: all .4s ease-in-out
+  transition: all .4s ease-in-out 
 }
 
 .activities label:hover {
-  color: #efe79b
-}
-
-.activities input:disabled {
-  text-decoration: line-through;
-}
-
-.activities input:disabled+label {
-  text-decoration: line-through;
+  color: #efe79b;
+  transform: scale(1.02)
 }
 
 input:focus {

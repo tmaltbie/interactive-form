@@ -78,12 +78,15 @@ activities.addEventListener('change', e => {
 
   for (let i = 0; i < activitiesInput.length; i++) {
     const checkboxDayTime = activitiesInput[i].getAttribute('data-day-and-time')
+    const activityDescription = document.querySelectorAll('.activities label')
     if (clickedDayTime === checkboxDayTime && clicked !== activitiesInput[i]) {
       activitiesInput[i].disabled = true
+      activityDescription[i].style.textDecoration = 'line-through'
       if (clicked.checked) {
         activitiesInput[i].disabled = true
       } else {
         activitiesInput[i].disabled = false
+        activityDescription[i].style.textDecoration = ''
       }
     }
   }
@@ -100,13 +103,12 @@ activities.addEventListener('change', e => {
 
 /** Payment Section */
 const payment = document.querySelectorAll('#payment option')
-payment[0].hidden = true
-
 const creditcard = document.querySelector('#credit-card')
 const paypal = document.querySelector('#paypal')
 const bitcoin = document.querySelector('#bitcoin')
 
-creditcard.hidden = true
+payment[0].hidden = true
+payment[1].selected = true
 paypal.hidden = true
 bitcoin.hidden = true
 
@@ -208,21 +210,23 @@ const creditCardValidator = () => {
 
   if (payment[1].selected && validNum.test(ccNumValue)) {
     ccNum.style.borderColor = 'green'
+    if (payment[1].selected && validZip.test(ccZipValue)) {
+      ccZip.style.borderColor = 'green'
+      if (payment[1].selected && validCVV.test(CVVvalue)) {
+        ccCVV.style.borderColor = 'green'
+        return true
+      } else {
+        ccCVV.style.borderColor = 'red'
+        return false
+      }
+    } else {
+      ccZip.style.borderColor = 'red'
+      return false
+    }
   } else {
     ccNum.style.borderColor = 'red'
     ccNum.placeholder = 'please enter your credit card number'
-  }
-
-  if (payment[1].selected && validZip.test(ccZipValue)) {
-    ccZip.style.borderColor = 'green'
-  } else {
-    ccZip.style.borderColor = 'red'
-  }
-
-  if (payment[1].selected && validCVV.test(CVVvalue)) {
-    ccCVV.style.borderColor = 'green'
-  } else {
-    ccCVV.style.borderColor = 'red'
+    return false
   }
 }
 
