@@ -149,7 +149,7 @@ const nameValidator = () => {
 
   if (validName) {
     name.style.borderColor = '#2a9d8f'
-    document.querySelector('[for=name').textContent = 'Name:'
+    document.querySelector('[for=name').textContent = 'Nice to meet you,'
     return true
   } else {
     name.style.borderColor = '#e76f51'
@@ -175,7 +175,7 @@ const emailValidator = () => {
   }
 
   if (validEmail) {
-    document.querySelector('[for=mail').textContent = 'Cool email'
+    document.querySelector('[for=mail').textContent = 'Valid email'
     email.style.borderColor = '#2a9d8f'
     return true
   } else {
@@ -272,7 +272,7 @@ form.addEventListener('submit', e => {
   if (!activitiesValidator()) {
     e.preventDefault()
   }
-  if (payment[1].selected && !creditCardValidator() && !cvvValidator() && !zipValidator()) {
+  if (payment[1].selected || !creditCardValidator() || !cvvValidator() || !zipValidator()) {
     e.preventDefault()
   }
 })
