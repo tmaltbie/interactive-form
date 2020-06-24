@@ -141,13 +141,19 @@ ccCVV.placeholder = '123'
  * otherwise it will create a placeholder message and create a red border
  */
 const nameValidator = () => {
+  let validName = false
   const nameValue = name.value
   if (nameValue !== '' || nameValue === null) {
-    name.style.borderColor = 'green'
+    validName = true
+  }
+
+  if (validName) {
+    name.style.borderColor = '#2a9d8f'
+    document.querySelector('[for=name').textContent = 'Name:'
     return true
   } else {
-    name.style.borderColor = 'red'
-    name.placeholder = 'please enter your name'
+    name.style.borderColor = '#e76f51'
+    document.querySelector('[for=name').textContent = 'Name: Username must have at least 1 character'
     return false
   }
 }
@@ -158,15 +164,23 @@ const nameValidator = () => {
  * the regular expression has been adapted from https://www.regular-expressions.info/email.html
  */
 const emailValidator = () => {
+  let validEmail = false
   const emailValue = email.value
-  const validEmail = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
-  if (validEmail.test(emailValue)) {
-    email.style.borderColor = 'green'
+  const emailRegex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
+  if (emailValue !== '' && emailRegex.test(emailValue)) {
+    validEmail = true
+  } else if (emailValue === '' || emailValue == null) {
+    document.querySelector('[for=mail').textContent = 'Please type your email'
+    return false
+  }
+
+  if (validEmail) {
+    document.querySelector('[for=mail').textContent = 'Cool email'
+    email.style.borderColor = '#2a9d8f'
     return true
   } else {
-    email.style.borderColor = 'red'
-    email.placeholder = 'please enter your email'
-    return false
+    document.querySelector('[for=mail').textContent = 'This email is invalid'
+    email.style.borderColor = '#e76f51'
   }
 }
 
@@ -174,7 +188,7 @@ const noSelectionMessage = document.createElement('div')
 noSelectionMessage.textContent = 'please select at least one activity'
 noSelectionMessage.style.fontStyle = 'bold'
 noSelectionMessage.style.fontSize = '16px'
-noSelectionMessage.style.color = 'red'
+noSelectionMessage.style.color = '#e76f51'
 noSelectionMessage.hidden = true
 activities.appendChild(noSelectionMessage)
 
@@ -196,7 +210,7 @@ const activitiesValidator = () => {
     noSelectionMessage.hidden = true
     return true
   } else {
-    activitiesLegend.style.color = 'red'
+    activitiesLegend.style.color = '#e76f51'
     noSelectionMessage.hidden = false
     return false
   }
@@ -206,10 +220,10 @@ const creditCardValidator = () => {
   const ccNumValue = ccNum.value
   const validNum = /^\d{13,16}$/
   if (payment[1].selected && validNum.test(ccNumValue)) {
-    ccNum.style.borderColor = 'green'
+    ccNum.style.borderColor = '#2a9d8f'
     return true
   } else {
-    ccNum.style.borderColor = 'red'
+    ccNum.style.borderColor = '#e76f51'
     ccNum.placeholder = 'please enter your credit card number'
     return false
   }
@@ -219,10 +233,10 @@ const cvvValidator = () => {
   const CVVvalue = ccCVV.value
   const validCVV = /^\d{3}$/
   if (payment[1].selected && validCVV.test(CVVvalue)) {
-    ccCVV.style.borderColor = 'green'
+    ccCVV.style.borderColor = '#2a9d8f'
     return true
   } else {
-    ccCVV.style.borderColor = 'red'
+    ccCVV.style.borderColor = '#e76f51'
     return false
   }
 }
@@ -231,10 +245,10 @@ const zipValidator = () => {
   const ccZipValue = ccZip.value
   const validZip = /^\d{5}$/
   if (payment[1].selected && validZip.test(ccZipValue)) {
-    ccZip.style.borderColor = 'green'
+    ccZip.style.borderColor = '#2a9d8f'
     return true
   } else {
-    ccZip.style.borderColor = 'red'
+    ccZip.style.borderColor = '#e76f51'
     return false
   }
 }
