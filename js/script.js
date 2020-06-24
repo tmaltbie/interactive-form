@@ -23,7 +23,7 @@ selectError.value = 'please'
 selectError.selected = true
 selectError.hidden = true
 colorSelectElement.appendChild(selectError)
-colorSelectElement.insertBefore(selectError, colorSelectElement.firstElementChild) // makes please select at top of options list
+colorSelectElement.insertBefore(selectError, colorSelectElement.firstElementChild)
 
 /**
  * hides all the t-shirt colors
@@ -106,13 +106,12 @@ const payment = document.querySelectorAll('#payment option')
 const creditcard = document.querySelector('#credit-card')
 const paypal = document.querySelector('#paypal')
 const bitcoin = document.querySelector('#bitcoin')
-
 payment[0].hidden = true
 payment[1].selected = true
 paypal.hidden = true
 bitcoin.hidden = true
 
-document.querySelector('#payment').addEventListener('change', e => {
+document.querySelector('#payment').addEventListener('change', () => {
   if (payment[1].selected) {
     creditcard.hidden = false
     paypal.hidden = true
@@ -133,6 +132,9 @@ const email = document.querySelector('#mail')
 const ccNum = document.querySelector('#cc-num')
 const ccZip = document.querySelector('#zip')
 const ccCVV = document.querySelector('#cvv')
+ccNum.placeholder = '0000 0000 0000 0000'
+ccZip.placeholder = '12345'
+ccCVV.placeholder = '123'
 
 /**
  * nameValidator looks to make sure a name of any kind has been entered into the name field
@@ -170,11 +172,11 @@ const emailValidator = () => {
 
 const noSelectionMessage = document.createElement('div')
 noSelectionMessage.textContent = 'please select at least one activity'
-noSelectionMessage.style.fontStyle = 'italic'
-noSelectionMessage.style.fontSize = '14px'
+noSelectionMessage.style.fontStyle = 'bold'
+noSelectionMessage.style.fontSize = '16px'
 noSelectionMessage.style.color = 'red'
 noSelectionMessage.hidden = true
-activitiesLegend.appendChild(noSelectionMessage)
+activities.appendChild(noSelectionMessage)
 
 /**
  * activitiesValidator looks to make at least one activity has been selected
@@ -202,27 +204,10 @@ const activitiesValidator = () => {
 
 const creditCardValidator = () => {
   const ccNumValue = ccNum.value
-  const ccZipValue = ccZip.value
-  const CVVvalue = ccCVV.value
   const validNum = /^\d{13,16}$/
-  const validZip = /^\d{5}$/
-  const validCVV = /^\d{3}$/
-
   if (payment[1].selected && validNum.test(ccNumValue)) {
     ccNum.style.borderColor = 'green'
-    if (payment[1].selected && validZip.test(ccZipValue)) {
-      ccZip.style.borderColor = 'green'
-      if (payment[1].selected && validCVV.test(CVVvalue)) {
-        ccCVV.style.borderColor = 'green'
-        return true
-      } else {
-        ccCVV.style.borderColor = 'red'
-        return false
-      }
-    } else {
-      ccZip.style.borderColor = 'red'
-      return false
-    }
+    return true
   } else {
     ccNum.style.borderColor = 'red'
     ccNum.placeholder = 'please enter your credit card number'
@@ -230,11 +215,35 @@ const creditCardValidator = () => {
   }
 }
 
+const cvvValidator = () => {
+  const CVVvalue = ccCVV.value
+  const validCVV = /^\d{3}$/
+  if (payment[1].selected && validCVV.test(CVVvalue)) {
+    ccCVV.style.borderColor = 'green'
+    return true
+  } else {
+    ccCVV.style.borderColor = 'red'
+    return false
+  }
+}
+
+const zipValidator = () => {
+  const ccZipValue = ccZip.value
+  const validZip = /^\d{5}$/
+  if (payment[1].selected && validZip.test(ccZipValue)) {
+    ccZip.style.borderColor = 'green'
+    return true
+  } else {
+    ccZip.style.borderColor = 'red'
+    return false
+  }
+}
+
 name.addEventListener('blur', nameValidator)
 email.addEventListener('blur', emailValidator)
 ccNum.addEventListener('keyup', creditCardValidator)
-ccCVV.addEventListener('keyup', creditCardValidator)
-ccZip.addEventListener('keyup', creditCardValidator)
+ccCVV.addEventListener('keyup', cvvValidator)
+ccZip.addEventListener('keyup', zipValidator)
 activities.addEventListener('change', activitiesValidator)
 
 form.addEventListener('submit', e => {
@@ -249,7 +258,7 @@ form.addEventListener('submit', e => {
   if (!activitiesValidator()) {
     e.preventDefault()
   }
-  if (!creditCardValidator()) {
+  if (payment[1].selected && !creditCardValidator() && !cvvValidator() && !zipValidator()) {
     e.preventDefault()
   }
 })
