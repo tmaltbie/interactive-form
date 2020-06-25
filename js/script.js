@@ -19,7 +19,6 @@ const colorSelectElement = document.querySelector('#color')
 const colorOptionElements = document.querySelectorAll('#color option')
 const selectError = document.createElement('option')
 selectError.text = 'Please select a theme'
-// selectError.value = 'please'
 selectError.selected = true
 selectError.hidden = true
 colorSelectElement.appendChild(selectError)
@@ -96,9 +95,6 @@ activities.addEventListener('change', e => {
   } else {
     price.textContent = `Total: $${total = total - activityCost}`
   }
-  if (total === 0) {
-    price.style.display = 'none'
-  }
 })
 
 /** Payment Section */
@@ -142,18 +138,19 @@ ccCVV.placeholder = '000'
  */
 const nameValidator = () => {
   let validName = false
+  const nameLabel = document.querySelector('[for=name')
   const nameValue = name.value
-  if (nameValue !== '' || nameValue === null) {
+  if (nameValue.trim() !== '' && nameValue !== null) {
     validName = true
   }
 
   if (validName) {
     name.style.borderColor = '#2a9d8f'
-    document.querySelector('[for=name').textContent = 'Nice to meet you,'
+    nameLabel.textContent = 'Nice to meet you,'
     return true
   } else {
     name.style.borderColor = '#e76f51'
-    document.querySelector('[for=name').textContent = 'Name: Username must have at least 1 character'
+    nameLabel.textContent = 'Name: Username must have at least 1 character'
     return false
   }
 }
@@ -165,22 +162,23 @@ const nameValidator = () => {
  */
 const emailValidator = () => {
   let validEmail = false
+  const emailText = document.querySelector('[for=mail')
   const emailValue = email.value
   const emailRegex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i
   if (emailValue !== '' && emailRegex.test(emailValue)) {
     validEmail = true
   } else if (emailValue === '' || emailValue == null) {
-    document.querySelector('[for=mail').textContent = 'Please type your email'
+    emailText.textContent = 'Please type your email'
     return false
   }
 
   if (validEmail) {
-    document.querySelector('[for=mail').textContent = 'Valid email'
     email.style.borderColor = '#2a9d8f'
+    emailText.textContent = 'Valid email'
     return true
   } else {
-    document.querySelector('[for=mail').textContent = 'This email is invalid'
     email.style.borderColor = '#e76f51'
+    emailText.textContent = 'This email is invalid'
   }
 }
 
