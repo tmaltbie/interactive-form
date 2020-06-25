@@ -74,12 +74,12 @@ activities.appendChild(price)
 activities.addEventListener('change', e => {
   const activity = e.target
   const activityTime = activity.getAttribute('data-day-and-time')
-  const activityCost = activity.getAttribute('data-cost')
+  const activityCost = parseInt(activity.getAttribute('data-cost'))
 
   for (let i = 0; i < activitiesInput.length; i++) {
-    const checkboxDayTime = activitiesInput[i].getAttribute('data-day-and-time')
+    const allActivitiesTime = activitiesInput[i].getAttribute('data-day-and-time')
     const activityDescription = document.querySelectorAll('.activities label')
-    if (activityTime === checkboxDayTime && activity !== activitiesInput[i]) {
+    if (activityTime === allActivitiesTime && activity !== activitiesInput[i]) {
       activitiesInput[i].disabled = true
       activityDescription[i].style.textDecoration = 'line-through'
       if (activity.checked) {
@@ -92,9 +92,9 @@ activities.addEventListener('change', e => {
   }
   if (activity.checked) {
     price.style.display = ''
-    price.textContent = `Total: $${total = total + parseInt(activityCost)}`
+    price.textContent = `Total: $${total = total + activityCost}`
   } else {
-    price.textContent = `Total: $${total = total - parseInt(activityCost)}`
+    price.textContent = `Total: $${total = total - activityCost}`
   }
   if (total === 0) {
     price.style.display = 'none'
