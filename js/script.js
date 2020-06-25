@@ -19,7 +19,7 @@ const colorSelectElement = document.querySelector('#color')
 const colorOptionElements = document.querySelectorAll('#color option')
 const selectError = document.createElement('option')
 selectError.text = 'Please select a theme'
-selectError.value = 'please'
+// selectError.value = 'please'
 selectError.selected = true
 selectError.hidden = true
 colorSelectElement.appendChild(selectError)
@@ -41,7 +41,7 @@ hideColorOptions()
 /** T-Shirt Selection */
 const designSelectElement = document.querySelector('#design')
 const designOptionsElements = document.querySelectorAll('#design option')
-designOptionsElements[0].hidden = true
+designOptionsElements[0].disabled = true
 colorDiv.hidden = true
 
 designSelectElement.addEventListener('change', () => {
@@ -72,17 +72,17 @@ price.style.display = 'none'
 activities.appendChild(price)
 
 activities.addEventListener('change', e => {
-  const clicked = e.target
-  const clickedDayTime = clicked.getAttribute('data-day-and-time')
-  const clickedCost = clicked.getAttribute('data-cost')
+  const activity = e.target
+  const activityTime = activity.getAttribute('data-day-and-time')
+  const activityCost = activity.getAttribute('data-cost')
 
   for (let i = 0; i < activitiesInput.length; i++) {
     const checkboxDayTime = activitiesInput[i].getAttribute('data-day-and-time')
     const activityDescription = document.querySelectorAll('.activities label')
-    if (clickedDayTime === checkboxDayTime && clicked !== activitiesInput[i]) {
+    if (activityTime === checkboxDayTime && activity !== activitiesInput[i]) {
       activitiesInput[i].disabled = true
       activityDescription[i].style.textDecoration = 'line-through'
-      if (clicked.checked) {
+      if (activity.checked) {
         activitiesInput[i].disabled = true
       } else {
         activitiesInput[i].disabled = false
@@ -90,11 +90,11 @@ activities.addEventListener('change', e => {
       }
     }
   }
-  if (clicked.checked) {
+  if (activity.checked) {
     price.style.display = ''
-    price.textContent = `Total: $${total = total + parseInt(clickedCost)}`
+    price.textContent = `Total: $${total = total + parseInt(activityCost)}`
   } else {
-    price.textContent = `Total: $${total = total - parseInt(clickedCost)}`
+    price.textContent = `Total: $${total = total - parseInt(activityCost)}`
   }
   if (total === 0) {
     price.style.display = 'none'
@@ -106,7 +106,7 @@ const payment = document.querySelectorAll('#payment option')
 const creditcard = document.querySelector('#credit-card')
 const paypal = document.querySelector('#paypal')
 const bitcoin = document.querySelector('#bitcoin')
-payment[0].hidden = true
+payment[0].disabled = true
 payment[1].selected = true
 paypal.hidden = true
 bitcoin.hidden = true
@@ -133,8 +133,8 @@ const ccNum = document.querySelector('#cc-num')
 const ccZip = document.querySelector('#zip')
 const ccCVV = document.querySelector('#cvv')
 ccNum.placeholder = '0000 0000 0000 0000'
-ccZip.placeholder = '12345'
-ccCVV.placeholder = '123'
+ccZip.placeholder = '00000'
+ccCVV.placeholder = '000'
 
 /**
  * nameValidator looks to make sure a name of any kind has been entered into the name field
@@ -219,7 +219,7 @@ const activitiesValidator = () => {
 const creditCardValidator = () => {
   const ccNumValue = ccNum.value
   const validNum = /^\d{13,16}$/
-  if (payment[1].selected && validNum.test(ccNumValue)) {
+  if (validNum.test(ccNumValue)) {
     ccNum.style.borderColor = '#2a9d8f'
     return true
   } else {
@@ -232,7 +232,7 @@ const creditCardValidator = () => {
 const cvvValidator = () => {
   const CVVvalue = ccCVV.value
   const validCVV = /^\d{3}$/
-  if (payment[1].selected && validCVV.test(CVVvalue)) {
+  if (validCVV.test(CVVvalue)) {
     ccCVV.style.borderColor = '#2a9d8f'
     return true
   } else {
@@ -244,7 +244,7 @@ const cvvValidator = () => {
 const zipValidator = () => {
   const ccZipValue = ccZip.value
   const validZip = /^\d{5}$/
-  if (payment[1].selected && validZip.test(ccZipValue)) {
+  if (validZip.test(ccZipValue)) {
     ccZip.style.borderColor = '#2a9d8f'
     return true
   } else {
@@ -253,8 +253,8 @@ const zipValidator = () => {
   }
 }
 
-name.addEventListener('blur', nameValidator)
-email.addEventListener('blur', emailValidator)
+name.addEventListener('keyup', nameValidator)
+email.addEventListener('keyup', emailValidator)
 ccNum.addEventListener('keyup', creditCardValidator)
 ccCVV.addEventListener('keyup', cvvValidator)
 ccZip.addEventListener('keyup', zipValidator)
@@ -263,16 +263,20 @@ activities.addEventListener('change', activitiesValidator)
 form.addEventListener('submit', e => {
   if (!nameValidator()) {
     e.preventDefault()
-    name.focus()
   }
   if (!emailValidator()) {
     e.preventDefault()
-    email.focus()
   }
   if (!activitiesValidator()) {
     e.preventDefault()
   }
-  if (payment[1].selected || !creditCardValidator() || !cvvValidator() || !zipValidator()) {
-    e.preventDefault()
+  if (payment[1].selected) {
+    creditCardValidator()
+    cvvValidator()
+    zipValidator()
+    if (!creditCardValidator() || !cvvValidator() || !zipValidator()) {
+      e.preventDefault()
+    }
   }
+  window.scrollTo(0, 0)
 })
